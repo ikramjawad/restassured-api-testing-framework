@@ -1,6 +1,11 @@
 target/
 *.class
 
+# Secrets
+.env
+.env.*
+!.env.example
+
 # IDE
 .idea/
 *.iml
@@ -8,6 +13,7 @@ target/
 .classpath
 .project
 .settings/
+.claude/
 
 # OS
 .DS_Store
@@ -15,5 +21,6 @@ Thumbs.db
 
 # Logs / reports
 test-output/
+test-reports/
 logs/
 *.log

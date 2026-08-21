@@ -1,5 +1,7 @@
 package com.ecommerce.api.config;
 
+import io.github.cdimascio.dotenv.Dotenv;
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Properties;
@@ -7,6 +9,10 @@ import java.util.Properties;
 public class ConfigManager {
 
     private static final Properties properties = new Properties();
+    private static final Dotenv dotenv = Dotenv.configure()
+            .ignoreIfMissing()
+            .ignoreIfMalformed()
+            .load();
 
     static {
         try (InputStream input = ConfigManager.class.getClassLoader().getResourceAsStream("config.properties")) {
@@ -23,6 +29,38 @@ public class ConfigManager {
     }
 
     public static String getBaseUrl() {
-        return properties.getProperty("base.url");
+        String value = getSecret("BASE_URL");
+        if (value == null || value.isBlank()) {
+            value = properties.getProperty("base.url");
+        }
+        return value;
+    }
+
+    public static String getDealSlug() {
+        return properties.getProperty("deal.slug");
+    }
+
+    public static String getInvalidDealSlug() {
+        return properties.getProperty("deal.invalid.slug");
+    }
+
+    public static String getApiKey() {
+        return getSecret("API_KEY");
+    }
+
+    public static String getApiSecretKey() {
+        return getSecret("API_SECRET_KEY");
+    }
+
+    /**
+     * Real environment variables take priority over .env so CI secrets (which are
+     * injected as env vars, not files) override local development values.
+     */
+    private static String getSecret(String name) {
+        String value = System.getenv(name);
+        if (value == null || value.isBlank()) {
+            value = dotenv.get(name);
+        }
+        return value;
     }
 }

@@ -16,10 +16,21 @@ public class BaseTest {
     public void setUpBase() {
         RestAssured.baseURI = ConfigManager.getBaseUrl();
 
-        requestSpec = new RequestSpecBuilder()
+        RequestSpecBuilder specBuilder = new RequestSpecBuilder()
                 .setContentType("application/json")
                 .addFilter(new RequestLoggingFilter())
-                .addFilter(new ResponseLoggingFilter())
-                .build();
+                .addFilter(new ResponseLoggingFilter());
+
+        String apiKey = ConfigManager.getApiKey();
+        if (apiKey != null && !apiKey.isBlank()) {
+            specBuilder.addHeader("API-KEY", apiKey);
+        }
+
+        String apiSecretKey = ConfigManager.getApiSecretKey();
+        if (apiSecretKey != null && !apiSecretKey.isBlank()) {
+            specBuilder.addHeader("API-SECRET", apiSecretKey);
+        }
+
+        requestSpec = specBuilder.build();
     }
 }

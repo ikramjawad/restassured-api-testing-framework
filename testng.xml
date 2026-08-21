@@ -1,20 +1,21 @@
 <!DOCTYPE suite SYSTEM "https://testng.org/testng-1.0.dtd">
 <suite name="ECommerce API Automation Suite" verbose="1">
-    <test name="Products API Tests">
+    <test name="Deals API Tests">
         <classes>
-            <class name="com.ecommerce.api.tests.products.ProductsTests"/>
+            <class name="com.ecommerce.api.tests.deals.DealsTests"/>
+            <class name="com.ecommerce.api.tests.deals.DealDetailTests"/>
         </classes>
     </test>
 
-    <test name="Auth API Tests">
+    <test name="Reservations API Tests">
         <classes>
-            <class name="com.ecommerce.api.tests.auth.AuthTests"/>
+            <class name="com.ecommerce.api.tests.reservations.ReservationsTests"/>
         </classes>
     </test>
 
-    <test name="Carts API Tests">
+    <test name="My Tracker API Tests">
         <classes>
-            <class name="com.ecommerce.api.tests.carts.CartsTests"/>
+            <class name="com.ecommerce.api.tests.mytracker.MyTrackerTests"/>
         </classes>
     </test>
 </suite>
