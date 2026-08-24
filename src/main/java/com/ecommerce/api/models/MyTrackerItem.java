@@ -2,13 +2,11 @@ package com.ecommerce.api.models;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 
+import java.util.Collections;
 import java.util.List;
 
-/**
- * issue_with_item is deliberately not mapped: it comes back as [], null, or
- * {"accepted_items": [...]} depending on the row, and ignoreUnknown drops it safely.
- */
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class MyTrackerItem {
 
@@ -23,11 +21,11 @@ public class MyTrackerItem {
 
     private String qty;
 
-    @JsonProperty("order_id")
-    private String orderId;
+    @JsonProperty("order_date")
+    private String orderDate;
 
-    @JsonProperty("tracking_number")
-    private String trackingNumber;
+    @JsonProperty("order_deadline")
+    private String orderDeadline;
 
     @JsonProperty("amount_paid")
     private String amountPaid;
@@ -41,10 +39,8 @@ public class MyTrackerItem {
     @JsonProperty("item_id")
     private String itemId;
 
-    @JsonProperty("item_name")
-    private String itemName;
-
-    private String notes;
+    @JsonProperty("note")
+    private String note;
 
     @JsonProperty("item_model_number")
     private String itemModelNumber;
@@ -78,6 +74,9 @@ public class MyTrackerItem {
     @JsonProperty("tracking_status")
     private String trackingStatus;
 
+    @JsonProperty("tracking_deadline")
+    private String trackingDeadline;
+
     @JsonProperty("retailer_links")
     private List<RetailerLink> retailerLinks;
 
@@ -89,6 +88,13 @@ public class MyTrackerItem {
 
     @JsonProperty("missed_deadline")
     private Boolean missedDeadline;
+
+    // Defaults to empty so rows where the API omits issue_with_item entirely (rather than
+    // sending null/[]) don't leave this null - IssueWithItemsDeserializer only runs when the
+    // key is present.
+    @JsonProperty("issue_with_item")
+    @JsonDeserialize(using = IssueWithItemsDeserializer.class)
+    private List<IssueWithItem> issueWithItem = Collections.emptyList();
 
     public String getReserveId() {
         return reserveId;
@@ -122,20 +128,20 @@ public class MyTrackerItem {
         this.qty = qty;
     }
 
-    public String getOrderId() {
-        return orderId;
+    public String getOrderDate() {
+        return orderDate;
     }
 
-    public void setOrderId(String orderId) {
-        this.orderId = orderId;
+    public void setOrderDate(String orderDate) {
+        this.orderDate = orderDate;
     }
 
-    public String getTrackingNumber() {
-        return trackingNumber;
+    public String getOrderDeadline() {
+        return orderDeadline;
     }
 
-    public void setTrackingNumber(String trackingNumber) {
-        this.trackingNumber = trackingNumber;
+    public void setOrderDeadline(String orderDeadline) {
+        this.orderDeadline = orderDeadline;
     }
 
     public String getAmountPaid() {
@@ -170,20 +176,12 @@ public class MyTrackerItem {
         this.itemId = itemId;
     }
 
-    public String getItemName() {
-        return itemName;
+    public String getNote() {
+        return note;
     }
 
-    public void setItemName(String itemName) {
-        this.itemName = itemName;
-    }
-
-    public String getNotes() {
-        return notes;
-    }
-
-    public void setNotes(String notes) {
-        this.notes = notes;
+    public void setNote(String note) {
+        this.note = note;
     }
 
     public String getItemModelNumber() {
@@ -274,6 +272,14 @@ public class MyTrackerItem {
         this.trackingStatus = trackingStatus;
     }
 
+    public String getTrackingDeadline() {
+        return trackingDeadline;
+    }
+
+    public void setTrackingDeadline(String trackingDeadline) {
+        this.trackingDeadline = trackingDeadline;
+    }
+
     public List<RetailerLink> getRetailerLinks() {
         return retailerLinks;
     }
@@ -304,5 +310,13 @@ public class MyTrackerItem {
 
     public void setMissedDeadline(Boolean missedDeadline) {
         this.missedDeadline = missedDeadline;
+    }
+
+    public List<IssueWithItem> getIssueWithItem() {
+        return issueWithItem;
+    }
+
+    public void setIssueWithItem(List<IssueWithItem> issueWithItem) {
+        this.issueWithItem = issueWithItem;
     }
 }

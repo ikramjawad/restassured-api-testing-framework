@@ -16,6 +16,27 @@
     <test name="My Tracker API Tests">
         <classes>
             <class name="com.ecommerce.api.tests.mytracker.MyTrackerTests"/>
+            <class name="com.ecommerce.api.tests.mytracker.TrackerUpdateTests"/>
+            <class name="com.ecommerce.api.tests.mytracker.PurchaseCancelTests"/>
+            <class name="com.ecommerce.api.tests.mytracker.ReservationCancelTests"/>
+        </classes>
+    </test>
+
+    <test name="Lookup API Tests">
+        <classes>
+            <class name="com.ecommerce.api.tests.lookups.LookupTests"/>
+        </classes>
+    </test>
+
+    <test name="Shipment API Tests">
+        <classes>
+            <class name="com.ecommerce.api.tests.shipments.ShipmentTests"/>
+        </classes>
+    </test>
+
+    <test name="Insurance API Tests">
+        <classes>
+            <class name="com.ecommerce.api.tests.insurance.InsuranceTests"/>
         </classes>
     </test>
 </suite>

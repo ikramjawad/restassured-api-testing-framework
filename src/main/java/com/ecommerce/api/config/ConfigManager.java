@@ -53,6 +53,15 @@ public class ConfigManager {
     }
 
     /**
+     * Looks up a one-off test fixture value (a tracking number, reserve id, etc.) by its
+     * config.properties key. These are single-use-per-test values, so they're kept as plain
+     * key lookups instead of one bespoke getter per fixture.
+     */
+    public static String getFixture(String key) {
+        return properties.getProperty(key);
+    }
+
+    /**
      * Real environment variables take priority over .env so CI secrets (which are
      * injected as env vars, not files) override local development values.
      */
