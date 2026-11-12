@@ -60,6 +60,10 @@
                     <suiteXmlFiles>
                         <suiteXmlFile>testng.xml</suiteXmlFile>
                     </suiteXmlFiles>
+                    <!-- Also emit TestNG's own HTML reports (test-output/index.html,
+                         test-output/emailable-report.html) - Surefire suppresses these by
+                         default in favor of its own target/surefire-reports/*.xml. -->
+                    <useDefaultListeners>true</useDefaultListeners>
                 </configuration>
             </plugin>
         </plugins>
