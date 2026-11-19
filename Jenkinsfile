@@ -45,15 +45,41 @@ pipeline {
     }
 
     environment {
-        BASE_URL       = credentials('smoke-base-url')
-        API_KEY        = credentials('smoke-api-key')
-        API_SECRET_KEY = credentials('smoke-api-secret')
         // One fixed report folder per suite - each Jenkins build keeps its own copy of it.
-        REPORTS_DIR    = "target/surefire-reports/${params.SMOKE_SUITE}"
+        REPORTS_DIR = "target/surefire-reports/${params.SMOKE_SUITE}"
     }
 
     stages {
+        stage('Check credentials') {
+            // Fails with a clear message naming every missing credential, instead of the bare
+            // "ERROR: <id>" Jenkins prints when a credentials() binding can't find one.
+            steps {
+                script {
+                    def missing = []
+                    for (id in ['smoke-base-url', 'smoke-api-key', 'smoke-api-secret']) {
+                        try {
+                            withCredentials([string(credentialsId: id, variable: 'UNUSED')]) {}
+                        } catch (err) {
+                            missing << id
+                        }
+                    }
+                    if (missing) {
+                        error("Missing Jenkins credentials: ${missing.join(', ')}. Add each one as Kind " +
+                                "'Secret text' with exactly that ID under Manage Jenkins -> Credentials -> " +
+                                "System -> Global credentials, then run the build again.")
+                    }
+                }
+            }
+        }
+
         stage('Run smoke tests') {
+            // Bound here rather than pipeline-wide: a pipeline-level binding that fails exits the
+            // agent before the post steps run, and junit then crashes with "hudson.Launcher is missing".
+            environment {
+                BASE_URL       = credentials('smoke-base-url')
+                API_KEY        = credentials('smoke-api-key')
+                API_SECRET_KEY = credentials('smoke-api-secret')
+            }
             steps {
                 // maven.test.failure.ignore keeps the build going after a failed test so the reports
                 // always get published; the junit step below then marks the build UNSTABLE.
@@ -66,7 +92,9 @@ pipeline {
 
     post {
         always {
-            junit testResults: "${env.REPORTS_DIR}/TEST-*.xml"
+            // allowEmptyResults: when the build stops before the tests run (e.g. missing credentials),
+            // the real error stays the last thing in the log instead of a "no test reports" error.
+            junit testResults: "${env.REPORTS_DIR}/TEST-*.xml", allowEmptyResults: true
             archiveArtifacts artifacts: "${env.REPORTS_DIR}/**", allowEmptyArchive: true
             script {
                 try {
