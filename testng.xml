@@ -10,6 +10,7 @@
     <test name="Reservations API Tests">
         <classes>
             <class name="com.ecommerce.api.tests.reservations.ReservationsTests"/>
+            <class name="com.ecommerce.api.tests.reservations.DealReserveTests"/>
         </classes>
     </test>
 

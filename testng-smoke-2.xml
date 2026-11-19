@@ -1,0 +1,10 @@
+<!DOCTYPE suite SYSTEM "https://testng.org/testng-1.0.dtd">
+<!-- Smoke 2: deals API -> find deal -> reserve -> cancel reservation -> order # is rejected.
+     Run with: mvn test -Psmoke-2 -->
+<suite name="Smoke 2 - Cancelled reservation" verbose="1">
+    <test name="Smoke 2 - Cancelled reservation">
+        <classes>
+            <class name="com.ecommerce.api.tests.smoke.CancelledReservationSmokeTest"/>
+        </classes>
+    </test>
+</suite>

@@ -1,0 +1,20 @@
+<!DOCTYPE suite SYSTEM "https://testng.org/testng-1.0.dtd">
+<!-- All three smoke flows. They create real reservations/purchases/shipments on the account
+     behind BASE_URL, so they are kept out of testng.xml. Run with: mvn test -Psmoke -->
+<suite name="Smoke - all flows" verbose="1">
+    <test name="Smoke 1 - Deal to insured shipment">
+        <classes>
+            <class name="com.ecommerce.api.tests.smoke.DealToShipmentSmokeTest"/>
+        </classes>
+    </test>
+    <test name="Smoke 2 - Cancelled reservation">
+        <classes>
+            <class name="com.ecommerce.api.tests.smoke.CancelledReservationSmokeTest"/>
+        </classes>
+    </test>
+    <test name="Smoke 3 - Cancelled purchase">
+        <classes>
+            <class name="com.ecommerce.api.tests.smoke.CancelledPurchaseSmokeTest"/>
+        </classes>
+    </test>
+</suite>

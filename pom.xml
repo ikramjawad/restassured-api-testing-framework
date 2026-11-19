@@ -22,6 +22,12 @@
         <jackson.version>2.17.1</jackson.version>
         <maven.surefire.version>3.2.5</maven.surefire.version>
         <dotenv.version>3.0.0</dotenv.version>
+
+        <!-- Suite to run and where its reports go. The smoke profiles below override both. -->
+        <suiteXmlFile>testng.xml</suiteXmlFile>
+        <surefireReportsDirectory>${project.build.directory}/surefire-reports</surefireReportsDirectory>
+        <!-- Time zone for smoke report folder names and the report's Start column. -->
+        <reportTimeZone>Asia/Karachi</reportTimeZone>
     </properties>
 
     <dependencies>
@@ -58,10 +64,79 @@
                 <version>${maven.surefire.version}</version>
                 <configuration>
                     <suiteXmlFiles>
-                        <suiteXmlFile>testng.xml</suiteXmlFile>
+                        <suiteXmlFile>${suiteXmlFile}</suiteXmlFile>
                     </suiteXmlFiles>
+                    <reportsDirectory>${surefireReportsDirectory}</reportsDirectory>
+                    <!-- emailable-report.html comes from ReadableEmailableReporter (readable start
+                         times), so TestNG's default emailable reporter is switched off. -->
+                    <systemPropertyVariables>
+                        <noEmailableReporter>true</noEmailableReporter>
+                        <report.timezone>${reportTimeZone}</report.timezone>
+                    </systemPropertyVariables>
+                    <properties>
+                        <property>
+                            <name>listener</name>
+                            <value>com.ecommerce.api.reporting.ReadableEmailableReporter</value>
+                        </property>
+                    </properties>
                 </configuration>
+            </plugin>
+
+            <!-- Maven's own build timestamp is always UTC, so the smoke report folders get their
+                 run timestamp (${runTimestamp}) from here instead, in reportTimeZone. -->
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>build-helper-maven-plugin</artifactId>
+                <version>3.6.0</version>
+                <executions>
+                    <execution>
+                        <id>run-timestamp</id>
+                        <phase>initialize</phase>
+                        <goals>
+                            <goal>timestamp-property</goal>
+                        </goals>
+                        <configuration>
+                            <name>runTimestamp</name>
+                            <pattern>yyyyMMdd-HHmmss</pattern>
+                            <timeZone>${reportTimeZone}</timeZone>
+                            <locale>en_US</locale>
+                        </configuration>
+                    </execution>
+                </executions>
             </plugin>
         </plugins>
     </build>
+
+    <!-- Smoke suites. Each run writes its own surefire report folder (XML + TestNG HTML) to
+         target/surefire-reports/<suite>/<yyyyMMdd-HHmmss>-PKT/ so runs never overwrite each other. -->
+    <profiles>
+        <profile>
+            <id>smoke-1</id>
+            <properties>
+                <suiteXmlFile>testng-smoke-1.xml</suiteXmlFile>
+                <surefireReportsDirectory>${project.build.directory}/surefire-reports/smoke-1/${runTimestamp}-PKT</surefireReportsDirectory>
+            </properties>
+        </profile>
+        <profile>
+            <id>smoke-2</id>
+            <properties>
+                <suiteXmlFile>testng-smoke-2.xml</suiteXmlFile>
+                <surefireReportsDirectory>${project.build.directory}/surefire-reports/smoke-2/${runTimestamp}-PKT</surefireReportsDirectory>
+            </properties>
+        </profile>
+        <profile>
+            <id>smoke-3</id>
+            <properties>
+                <suiteXmlFile>testng-smoke-3.xml</suiteXmlFile>
+                <surefireReportsDirectory>${project.build.directory}/surefire-reports/smoke-3/${runTimestamp}-PKT</surefireReportsDirectory>
+            </properties>
+        </profile>
+        <profile>
+            <id>smoke</id>
+            <properties>
+                <suiteXmlFile>testng-smoke.xml</suiteXmlFile>
+                <surefireReportsDirectory>${project.build.directory}/surefire-reports/smoke-all/${runTimestamp}-PKT</surefireReportsDirectory>
+            </properties>
+        </profile>
+    </profiles>
 </project>

@@ -19,6 +19,12 @@ public class MyTrackerItem {
     @JsonProperty("shipment_id")
     private String shipmentId;
 
+    @JsonProperty("order_id")
+    private String orderId;
+
+    @JsonProperty("tracking_number")
+    private String trackingNumber;
+
     private String qty;
 
     @JsonProperty("order_date")
@@ -118,6 +124,22 @@ public class MyTrackerItem {
 
     public void setShipmentId(String shipmentId) {
         this.shipmentId = shipmentId;
+    }
+
+    public String getOrderId() {
+        return orderId;
+    }
+
+    public void setOrderId(String orderId) {
+        this.orderId = orderId;
+    }
+
+    public String getTrackingNumber() {
+        return trackingNumber;
+    }
+
+    public void setTrackingNumber(String trackingNumber) {
+        this.trackingNumber = trackingNumber;
     }
 
     public String getQty() {
