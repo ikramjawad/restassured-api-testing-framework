@@ -67,7 +67,9 @@
                         <suiteXmlFile>${suiteXmlFile}</suiteXmlFile>
                     </suiteXmlFiles>
                     <reportsDirectory>${surefireReportsDirectory}</reportsDirectory>
-                    <!-- emailable-report.html comes from ReadableEmailableReporter (readable start
+                    <!-- TestNG's own HTML reports (index.html, testng-results.xml) are written to the
+                         reports directory by default; Surefire has no useDefaultListeners parameter.
+                         emailable-report.html comes from ReadableEmailableReporter (readable start
                          times), so TestNG's default emailable reporter is switched off. -->
                     <systemPropertyVariables>
                         <noEmailableReporter>true</noEmailableReporter>

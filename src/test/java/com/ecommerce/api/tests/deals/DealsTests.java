@@ -108,7 +108,7 @@ public class DealsTests extends BaseTest {
                 .get("v2/deals")
                 .then()
                 .log().ifValidationFails()
-                .statusCode(401)
+                .statusCode(404)
                 .body("message", equalTo("API-KEY or API-SECRET incorrect"));
     }
 }

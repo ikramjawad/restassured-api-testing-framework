@@ -53,6 +53,20 @@ public class TrackerUpdateItem {
         return item;
     }
 
+    /**
+     * The API creates the purchase and shipment together in one call when purchase_id is left
+     * unset - it auto-generates the purchase_id itself, so only reserve_id is needed going in.
+     */
+    public static TrackerUpdateItem forShipmentCreateFromReservation(String reserveId, String orderNo,
+                                                                        String trackingNumber, int qty) {
+        TrackerUpdateItem item = new TrackerUpdateItem();
+        item.reserveId = reserveId;
+        item.orderNo = orderNo;
+        item.trackingNumber = trackingNumber;
+        item.qty = qty;
+        return item;
+    }
+
     public static TrackerUpdateItem forShipmentCreate(String reserveId, String purchaseId, String orderNo,
                                                         String trackingNumber, int qty) {
         TrackerUpdateItem item = new TrackerUpdateItem();

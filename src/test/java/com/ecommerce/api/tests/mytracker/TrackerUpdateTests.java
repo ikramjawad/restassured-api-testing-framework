@@ -34,12 +34,30 @@ public class TrackerUpdateTests extends BaseTest {
     private static final String SHIPMENT_CREATE_ORDER_NO = ConfigManager.getFixture("tracker.shipmentCreate.orderNo");
     private static final String SHIPMENT_CREATE_TRACKING_NUMBER = ConfigManager.getFixture("tracker.shipmentCreate.trackingNumber");
 
+    private static final String SHIPMENT_CREATE_FROM_RESERVATION_RESERVE_ID =
+            ConfigManager.getFixture("tracker.shipmentCreateFromReservation.reserveId");
+    private static final String SHIPMENT_CREATE_FROM_RESERVATION_ORDER_NO =
+            ConfigManager.getFixture("tracker.shipmentCreateFromReservation.orderNo");
+    private static final String SHIPMENT_CREATE_FROM_RESERVATION_TRACKING_NUMBER =
+            ConfigManager.getFixture("tracker.shipmentCreateFromReservation.trackingNumber");
+
     private static final String SHIPMENT_UPDATE_RESERVE_ID = ConfigManager.getFixture("tracker.shipmentUpdate.reserveId");
     private static final String SHIPMENT_UPDATE_PURCHASE_ID = ConfigManager.getFixture("tracker.shipmentUpdate.purchaseId");
     private static final String SHIPMENT_UPDATE_SHIPMENT_ID = ConfigManager.getFixture("tracker.shipmentUpdate.shipmentId");
     private static final String SHIPMENT_UPDATE_TRACKING_NUMBER = ConfigManager.getFixture("tracker.shipmentUpdate.trackingNumber");
 
     private static final int RATE_LIMIT_MAX_ATTEMPTS = 50;
+
+    @Test
+    public void createShipmentFromReservation_withValidReserveIdOrderNoAndTrackingNumber_returnsSuccess() {
+        // The API creates the purchase and shipment together in one call here - no separate
+        // purchase_id needed going in, it generates one itself.
+        TrackerUpdateResponse response = submitTrackerUpdate(
+                TrackerUpdateItem.forShipmentCreateFromReservation(SHIPMENT_CREATE_FROM_RESERVATION_RESERVE_ID,
+                        SHIPMENT_CREATE_FROM_RESERVATION_ORDER_NO, SHIPMENT_CREATE_FROM_RESERVATION_TRACKING_NUMBER, 1));
+
+        assertUpdateSucceeded(response);
+    }
 
     @Test
     public void updateReservation_withValidReserveIdAndQty_returnsSuccess() {
